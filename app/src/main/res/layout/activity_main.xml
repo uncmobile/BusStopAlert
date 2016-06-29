@@ -53,4 +53,37 @@
         android:layout_alignParentEnd="true"
         android:layout_above="@+id/button" />
 
+    <SeekBar
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/busStopSlider"
+        android:layout_below="@+id/button2"
+        android:layout_marginTop="39dp"
+        android:max="5"
+        android:progress="0"
+        android:indeterminate="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log Bus Stop"
+        android:id="@+id/busStopLogButton"
+        android:onClick="onClick"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/button2"
+        android:layout_toLeftOf="@+id/busStopSlider"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bus stop: "
+        android:id="@+id/busStopText"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/busStopSlider"
+        android:layout_alignStart="@+id/busStopSlider" />
+
 </RelativeLayout>

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     static String fileContent = "";
     static int serial = 1;
     TextView sensortxt;
+    TextView busStop;
+    SeekBar stopSlider;
     private long lastUpdate = 0;
     SensorManager sensorManager;
     Sensor tempSensor, humidSensor, acceleroSensor, magnetSensor, gyroscopeSensor,
@@ -37,11 +40,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
 
         sensortxt = (TextView) findViewById(R.id.textViewSensors);
+        busStop = (TextView) findViewById(R.id.busStopText);
+        stopSlider = (SeekBar) findViewById(R.id.busStopSlider);
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         try {
+            busStop.setText("Bus stop: " + stopSlider.getProgress());
 
             int currType = event.sensor.getType();
 
@@ -79,10 +85,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 String str = currentDateandTime + "\t" + Constants.temperature + "\t" +
                         Constants.humidity + "\t" + Constants.baroString + "\t" +
                         Constants.acceloString + "\t" + Constants.magnet +
-                        "\t" + Constants.gyroString + "\t" + Constants.lightString;
+                        "\t" + Constants.gyroString + "\t" + Constants.lightString + "\t" +
+                        Constants.stopString;
 
                 Constants.ALL_SENSOR_STR = str;
                 appendContent(Constants.ALL_SENSOR_STR + "\n");
+                Constants.stopString = "-9999"; // reset bus stop
                 //Constants.list.add(str);
                 lastUpdate = System.currentTimeMillis();
             }
@@ -98,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void sensorKill() {
+        busStop.setText("Bus stop:");
         sensorManager.unregisterListener(this);
         reading = false;
     }
@@ -180,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             String fileToWrite = sdf.format(new Date()) + ".txt";
             File file = new File(root, fileToWrite);
 
+            // In rare case of same time log - should probably handle this elsewhere
             int serialIncrement = 1;
             while(file.exists()) {
                 fileToWrite = fileToWrite + (serial + serialIncrement)
@@ -236,6 +246,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.busStopLogButton:
+                Constants.stopString = "" + stopSlider.getProgress();
+                Toast.makeText(getBaseContext(), "Logged bus stop " + stopSlider.getProgress() ,
+                        Toast.LENGTH_SHORT).show();
         }
 
     }
