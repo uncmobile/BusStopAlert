@@ -1,4 +1,4 @@
-package edu.unc.sjyan.beanlog;
+package edu.unc.sjyan.busdata;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

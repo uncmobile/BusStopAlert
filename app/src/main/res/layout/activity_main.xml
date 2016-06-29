@@ -7,152 +7,21 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.unc.sjyan.beanlog.MainActivity">
+    tools:context="edu.unc.sjyan.busdata.MainActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select your activity:"
-        android:id="@+id/textView" />
-
-    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/radioGroup"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:orientation="vertical">
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Standing"
-        android:id="@+id/radioButton"
-        android:onClick="onRadioGroup1Clicked"
-        android:checked="false"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sitting"
-        android:id="@+id/radioButton2"
-        android:onClick="onRadioGroup1Clicked"
-        android:checked="false"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Walking"
-        android:id="@+id/radioButton3"
-        android:onClick="onRadioGroup1Clicked"
-        android:checked="false"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Running"
-        android:id="@+id/radioButton4"
-        android:onClick="onRadioGroup1Clicked"
-        android:checked="false"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upstairs"
-        android:id="@+id/radioButton5"
-        android:onClick="onRadioGroup1Clicked"
-        android:checked="false"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Downstairs"
-        android:id="@+id/radioButton6"
-        android:onClick="onRadioGroup1Clicked"
-        android:checked="false"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    </RadioGroup>
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select your bean position:"
-        android:layout_marginTop="80dp"
-        android:layout_below="@+id/radioGroup"
-        android:id="@+id/textView2" />
-
-    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/radioGroup2"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:orientation="horizontal">
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Waist"
-        android:id="@+id/radioButton7"
-        android:onClick="onRadioGroup2Clicked"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:checked="false" />
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Wrist"
-        android:id="@+id/radioButton8"
-        android:onClick="onRadioGroup2Clicked"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:checked="false" />
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Shoe"
-        android:id="@+id/radioButton9"
-        android:onClick="onRadioGroup2Clicked"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:checked="false" />
-
-    </RadioGroup>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="You are:"
-        android:id="@+id/textView3"
-        android:layout_above="@+id/button" />
+        android:text="Sensors: "
+        android:textColor="#080808"
+        android:id="@+id/textViewSensors" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView4"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/textView3"
-        android:layout_alignBaseline="@+id/textView3" />
+        android:layout_marginLeft="5dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -161,7 +30,6 @@
         android:id="@+id/button"
         android:onClick="onClick"
         android:layout_centerVertical="true"
-        android:layout_above="@+id/button4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -171,7 +39,6 @@
         android:text="Stop"
         android:onClick="onClick"
         android:id="@+id/button2"
-        android:layout_above="@+id/button5"
         android:layout_alignBottom="@+id/button"
         android:layout_centerHorizontal="true" />
 
@@ -181,27 +48,9 @@
         android:text="Save"
         android:onClick="onClick"
         android:id="@+id/button3"
-        android:layout_above="@+id/textView3"
         android:layout_alignBaseline="@+id/button2"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start Classify"
-        android:id="@+id/button4"
-        android:onClick="onClick"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stop Classify"
-        android:id="@+id/button5"
-        android:onClick="onClick"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/button4" />
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/button" />
 
 </RelativeLayout>
