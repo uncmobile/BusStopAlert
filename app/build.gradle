@@ -5,9 +5,9 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "edu.unc.sjyan.beanlog"
-        minSdkVersion 18
-        targetSdkVersion 22
+        applicationId "edu.unc.sjyan.busdata"
+        minSdkVersion 16
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
@@ -23,7 +23,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.punchthrough.bean.sdk:sdk:1.0.1'
+    compile 'com.google.android.gms:play-services-location:8.4.+'
     compile files('libs/ajt-1.20.jar')
     compile files('libs/commons-math-1.2.jar')
     compile files('libs/Jama-1.0.2.jar')

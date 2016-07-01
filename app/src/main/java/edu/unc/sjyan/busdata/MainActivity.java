@@ -1,16 +1,19 @@
 package edu.unc.sjyan.busdata;
 
 // Android Packages
+import android.app.Dialog;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +24,20 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
+// Google play services
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.common.api.Status;
+
+public class MainActivity extends AppCompatActivity implements
+        SensorEventListener, ResultCallback<Status>,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     boolean reading;
     static String fileContent = "";
@@ -29,20 +45,108 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     TextView sensortxt;
     TextView busStop;
     SeekBar stopSlider;
+    Switch gpsSwitch;
     private long lastUpdate = 0;
     SensorManager sensorManager;
     Sensor tempSensor, humidSensor, acceleroSensor, magnetSensor, gyroscopeSensor,
             barometerSensor, lightSensor;
+    private GoogleApiClient c = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        buildGoogleApiClient();
 
         sensortxt = (TextView) findViewById(R.id.textViewSensors);
         busStop = (TextView) findViewById(R.id.busStopText);
         stopSlider = (SeekBar) findViewById(R.id.busStopSlider);
+        gpsSwitch = (Switch) findViewById(R.id.switch1);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.v("TAG", "We are connected to Google Services");
+        Toast.makeText(getBaseContext(), "Connected to GPS",
+                Toast.LENGTH_SHORT).show();
+        try {
+            LocationRequest mLocationRequest = new LocationRequest();
+            mLocationRequest.setInterval(1000);
+            mLocationRequest.setFastestInterval(500);
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            LocationServices.FusedLocationApi.requestLocationUpdates(c, mLocationRequest, this);
+
+            Location loc = LocationServices.FusedLocationApi.getLastLocation(c);
+            if(loc == null) {
+                Toast.makeText(getBaseContext(), "Provider is null - GPS won't log",
+                        Toast.LENGTH_SHORT).show();
+            }
+            Constants.latString = (loc != null) ? "" + loc.getLatitude() : "-9999";
+            Constants.longString = (loc != null) ? "" + loc.getLongitude() : "-9999";
+        } catch (SecurityException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        c = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.v("Connection" , " suspended");
+        Toast.makeText(getBaseContext(), "GPS Suspended",
+                Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.v("Connection Status", connectionResult.toString());
+        Toast.makeText(getBaseContext(), "GPS Connection Failed",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStart() {
+        // Pause after build - connect only when reading data
+        // c.connect();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        c.disconnect();
+        super.onStop();
+    }
+
+
+    @Override
+    public void onResult(Status status) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Constants.latString = "" + location.getLatitude();
+        Constants.longString = "" + location.getLongitude();
+    }
+
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -86,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         Constants.humidity + "\t" + Constants.baroString + "\t" +
                         Constants.acceloString + "\t" + Constants.magnet +
                         "\t" + Constants.gyroString + "\t" + Constants.lightString + "\t" +
+                        Constants.latString + "\t" + Constants.longString + "\t" +
                         Constants.stopString;
 
                 Constants.ALL_SENSOR_STR = str;
@@ -180,7 +285,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             String today = sdf.format(new Date());
-            File root = new File(Environment.getExternalStorageDirectory(), today + "_sjyan");
+            File root = new File(Environment.getExternalStorageDirectory(), today + "_" +
+                    Constants.USER);
             if (!root.exists()) {
                 root.mkdirs();
             }
@@ -213,6 +319,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         switch(v.getId()) {
             case R.id.button:
                 if(!reading) {
+                    if(gpsSwitch.isChecked()) { c.connect(); }
                     sensorInit();
                     Toast.makeText(getBaseContext(), "Started reading environment",
                             Toast.LENGTH_SHORT).show();
@@ -224,6 +331,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             case R.id.button2:
                 // stop
                 if(reading) {
+                    c.disconnect();
                     sensorKill();
                     sensortxt.setText("Sensors:");
                     Toast.makeText(getBaseContext(), "Stopped reading environment",

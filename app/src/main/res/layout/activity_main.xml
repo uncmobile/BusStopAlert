@@ -16,6 +16,15 @@
         android:textColor="#080808"
         android:id="@+id/textViewSensors" />
 
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable GPS logging"
+        android:id="@+id/switch1"
+        android:layout_below="@+id/textViewSensors"
+        android:layout_alignStart="@+id/textView4"
+        android:checked="false" />
+
 
     <TextView
         android:layout_width="wrap_content"
