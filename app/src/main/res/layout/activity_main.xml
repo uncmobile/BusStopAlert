@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="edu.unc.sjyan.busdata.MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sensors: "
+        android:textColor="#080808"
+        android:id="@+id/textViewSensors" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable GPS logging"
+        android:id="@+id/switch1"
+        android:layout_below="@+id/textViewSensors"
+        android:layout_alignStart="@+id/textView4"
+        android:checked="false" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4"
+        android:layout_marginLeft="5dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:id="@+id/startButton"
+        android:onClick="onClick"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop"
+        android:onClick="onClick"
+        android:id="@+id/stopButton"
+        android:layout_alignBottom="@+id/startButton"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:onClick="onClick"
+        android:id="@+id/saveButton"
+        android:layout_alignBaseline="@+id/stopButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/startButton" />
+
+    <SeekBar
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/busStopSlider"
+        android:layout_below="@+id/stopButton"
+        android:layout_marginTop="9dp"
+        android:max="20"
+        android:progress="0"
+        android:indeterminate="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Begin Bus Stop"
+        android:id="@+id/busStopStartButton"
+        android:onClick="onClick"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/stopButton"
+        android:layout_toLeftOf="@+id/busStopSlider"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Bus Stop"
+        android:id="@+id/busStopEndButton"
+        android:onClick="onClick"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/busStopStartButton"
+        android:layout_toLeftOf="@+id/busStopSlider"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bus stop: "
+        android:id="@+id/busStopText"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/busStopSlider"
+        android:layout_alignStart="@+id/busStopSlider" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Not Collecting Data"
+        android:id="@+id/infoText"
+        android:textSize="40dp"
+        android:layout_above="@+id/startButton"
+        android:layout_alignStart="@+id/switch1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="At Bus Stop: NA"
+        android:id="@+id/currentBusStop"
+        android:layout_alignTop="@+id/busStopEndButton"
+        android:layout_alignStart="@+id/busStopText"
+        android:textColor="#717171"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp" />
+
+</RelativeLayout>
