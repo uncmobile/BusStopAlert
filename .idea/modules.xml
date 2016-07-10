@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/BusStopAlert-master.iml" filepath="$PROJECT_DIR$/BusStopAlert-master.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/BusStopAlert.iml" filepath="$PROJECT_DIR$/BusStopAlert.iml" />
+>>>>>>> e47227cbb2730db8b6e3b9dc89b2e412d2fe92f0
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -180,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements
             busStop.setText("Bus stop: " + stopSlider.getProgress());
             busStop.invalidate();
 
-
             int currType = event.sensor.getType();
 
             if(currType == Sensor.TYPE_AMBIENT_TEMPERATURE) {
@@ -228,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements
                 lastUpdate = System.currentTimeMillis();
                 infoText.setText(currentDateandTime);
             }
-
         }catch (Exception e) {
             e.printStackTrace();
         }
