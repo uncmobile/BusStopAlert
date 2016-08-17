@@ -37,3 +37,5 @@ Read more about what `radius` means in this context here: http://www.cs.fit.edu/
 ## Classification
 
 As we've seen before, we can add our training instances (time series) to the dataset and then build our classifier from that dataset. The next steps regarding how to classify with the distance/similarity measures are still unclear and require discussion. 
+
+When we have our desired set of series, we need to compute a distance matrix, the distances being the indices computed from DTW - from there we need to feed the distance matrix to the dataset in a way that is interpretable by a clusterer that we can then build and begin clustering alike time series and identify common routes
