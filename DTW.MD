@@ -8,7 +8,7 @@ Some preliminary remarks: there are other distance similarity algorithms - dynam
 There is a way to compute a similarity measure based on the raw DTW computation using the `DTWSimilarity` class that may be of interest
 
 ```java
-double similarityIndex = new DTWSimilarity().measure(Instance a, Instance b)
+double similarityIndex = new DTWSimilarity().measure(Instance a, Instance b);
 ```
 
 where our instances are defined as a `double` array (though this is typically a static-framed object with a number of properties), we can use this instead as an order-important sequence, a time series, to be compared.
@@ -16,10 +16,15 @@ where our instances are defined as a `double` array (though this is typically a 
 Using the original DTW computations we can get a distance measure like this
 
 ```java
-double distance = new DTW().getWarpDistanceBetween(TimeSeries a, TimeSeries b)
+double distance = new DTW().getWarpDistanceBetween(TimeSeries a, TimeSeries b);
 ```
 
-There may need to be some work done to map a time series to a JavaML instance and vice versa - right now the exact nature of the `TimeSeries` class is still unclear.
+There may need to be some work done to map a time series to a JavaML instance and vice versa - ~~right now the exact nature of the `TimeSeries` class is still unclear.~~
+
+You can create a time series from an instance:
+```java
+TimeSeries t = new TimeSeries(Instance a);
+```
 
 It will be worthwhile to also mention that there is a `FastDTW` class. We can grab that index like
 
