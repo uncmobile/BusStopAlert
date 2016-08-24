@@ -6,11 +6,13 @@ package edu.unc.sjyan.busdata;
 public  class Constants {
     public static final String USER = "chenchik";
     public static String header = "Time" + "," + "Temp" + "," + "Hum" + "," + "Baro" +
-            "," + "Acc(x)" + "," + "Acc(y)" + "," + "Acc(z)" + "," + "Mag(x)" +
-            "," + "Mag(y)" + "," + "Mag(z)" + "," + "Gyro(x)" + "," + "Gyro(y)" +
-            "," + "Gyro(z)" + "," + "Light" + "," + "Lat" + "," + "Long" +
-            "," + "Stop";
+            "," + "Acc(x)" + "," + "Acc(y)" + "," + "Acc(z)" +
+            "," + "LinAcc(x)" + "," + "LinAcc(y)" + "," + "LinAcc(z)" +
+            "," + "Mag(x)" + "," + "Mag(y)" + "," + "Mag(z)" +
+            "," + "Gyro(x)" + "," + "Gyro(y)" + "," + "Gyro(z)" +
+            "," + "Light" + "," + "Lat" + "," + "Long" + "," + "Stop";
     public static String acceloString = "-9999,-9999,-9999";
+    public static String linAcceloString = "-9999,-9999,-9999";
     public static String magnet = "-9999,-9999,-9999";
     public static String gyroString = "-9999,-9999,-9999";
     public static String temperature = "-9999";

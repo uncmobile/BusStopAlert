@@ -24,6 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 // Google play services
 import com.google.android.gms.common.ConnectionResult;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements
     Switch gpsSwitch;
     private long lastUpdate = 0;
     SensorManager sensorManager;
-    Sensor tempSensor, humidSensor, acceleroSensor, magnetSensor, gyroscopeSensor,
+    Sensor tempSensor, humidSensor, acceleroSensor,linAcceleroSensor, magnetSensor, gyroscopeSensor,
             barometerSensor, lightSensor;
     private GoogleApiClient c = null;
     TextView infoText;
@@ -192,6 +193,10 @@ public class MainActivity extends AppCompatActivity implements
                 Constants.acceloString = event.values[0] + "," + event.values[1] + "," +
                         event.values[2];
             }
+            else if(currType == Sensor.TYPE_LINEAR_ACCELERATION){
+                Constants.linAcceloString = event.values[0] + "," + event.values[1] + "," +
+                        event.values[2];
+            }
             else if(currType == Sensor.TYPE_MAGNETIC_FIELD) {
                 Constants.magnet = event.values[0] + "," + event.values[1] + "," +
                         event.values[2];
@@ -212,10 +217,10 @@ public class MainActivity extends AppCompatActivity implements
 
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
                 String currentDateandTime = sdf.format(new Date());
-
-                String str = currentDateandTime + "," + Constants.temperature + "," +
+                long milliseconds = System.currentTimeMillis();
+                String str = /*currentDateandTime*/milliseconds + "," + Constants.temperature + "," +
                         Constants.humidity + "," + Constants.baroString + "," +
-                        Constants.acceloString + "," + Constants.magnet +
+                        Constants.acceloString + "," + Constants.linAcceloString + "," +  Constants.magnet +
                         "," + Constants.gyroString + "," + Constants.lightString + "," +
                         Constants.latString + "," + Constants.longString + "," +
                         Constants.stopString;
@@ -249,11 +254,18 @@ public class MainActivity extends AppCompatActivity implements
 
         tempSensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
         acceleroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        linAcceleroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         magnetSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         humidSensor = sensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY);
         barometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+
+        List<Sensor> sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL);
+        for(int i = 0 ; i < sensorList.size(); i++){
+            Log.v("SENSOR LIST", sensorList.get(i).toString());
+        }
+
 
         String senlist = "[";
 
@@ -272,6 +284,11 @@ public class MainActivity extends AppCompatActivity implements
         if(acceleroSensor!=null) {
             sensorManager.registerListener(this, acceleroSensor, 900);
             senlist += " ACC ";
+        }
+
+        if(linAcceleroSensor!=null) {
+            sensorManager.registerListener(this, linAcceleroSensor, 900);
+            senlist += " LINACC ";
         }
 
         if(magnetSensor != null) {
