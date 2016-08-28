@@ -125,4 +125,21 @@
         android:textColor="#717171"
         android:textSize="20dp"
         android:layout_marginTop="10dp" />
+
+    <ImageView
+        android:id="@+id/main_image_dial"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/busStopEndButton"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/dial"/>
+
+    <ImageView
+        android:id="@+id/main_image_hands"
+        android:layout_width="14dp"
+        android:layout_height="100dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/hands"
+        android:layout_below="@+id/busStopEndButton"
+        android:layout_marginLeft="43dp" />
 </RelativeLayout>

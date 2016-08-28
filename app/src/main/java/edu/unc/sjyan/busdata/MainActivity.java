@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -55,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements
     private GoogleApiClient c = null;
     TextView infoText;
     TextView currentBusStop;
+    private static final String TAG = "MainActivity";
+
+    private Compass compass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements
 
             }
         });
+        compass = new Compass(this);
+        compass.arrowView = (ImageView) findViewById(R.id.main_image_hands);
     }
 
     @Override
@@ -100,6 +106,12 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onPause() {
         super.onPause();
+        compass.stop();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        compass.start();
     }
 
     @Override
@@ -154,12 +166,14 @@ public class MainActivity extends AppCompatActivity implements
         // Pause after build - connect only when reading data
         // c.connect();
         super.onStart();
+        compass.start();
     }
 
     @Override
     protected void onStop() {
         c.disconnect();
         super.onStop();
+        compass.stop();
     }
 
 
@@ -220,8 +234,8 @@ public class MainActivity extends AppCompatActivity implements
                 long milliseconds = System.currentTimeMillis();
                 String str = /*currentDateandTime*/milliseconds + "," + Constants.temperature + "," +
                         Constants.humidity + "," + Constants.baroString + "," +
-                        Constants.acceloString + "," + Constants.linAcceloString + "," +  Constants.magnet +
-                        "," + Constants.gyroString + "," + Constants.lightString + "," +
+                        Constants.acceloString + "," + Constants.linAcceloString + "," +  Constants.magnet + "," +
+                        Constants.degrees + "," + Constants.gyroString + "," + Constants.lightString + "," +
                         Constants.latString + "," + Constants.longString + "," +
                         Constants.stopString;
 
@@ -294,6 +308,7 @@ public class MainActivity extends AppCompatActivity implements
         if(magnetSensor != null) {
             sensorManager.registerListener(this, magnetSensor, 900);
             senlist += " MAG ";
+            senlist += "DEGREES";
         }
 
         if(gyroscopeSensor != null) {

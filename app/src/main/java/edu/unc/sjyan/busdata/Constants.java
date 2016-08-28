@@ -8,12 +8,13 @@ public  class Constants {
     public static String header = "Time" + "," + "Temp" + "," + "Hum" + "," + "Baro" +
             "," + "Acc(x)" + "," + "Acc(y)" + "," + "Acc(z)" +
             "," + "LinAcc(x)" + "," + "LinAcc(y)" + "," + "LinAcc(z)" +
-            "," + "Mag(x)" + "," + "Mag(y)" + "," + "Mag(z)" +
+            "," + "Mag(x)" + "," + "Mag(y)" + "," + "Mag(z)" +"," +  "Degrees" +
             "," + "Gyro(x)" + "," + "Gyro(y)" + "," + "Gyro(z)" +
             "," + "Light" + "," + "Lat" + "," + "Long" + "," + "Stop";
     public static String acceloString = "-9999,-9999,-9999";
     public static String linAcceloString = "-9999,-9999,-9999";
     public static String magnet = "-9999,-9999,-9999";
+    public static String degrees = "-9999";
     public static String gyroString = "-9999,-9999,-9999";
     public static String temperature = "-9999";
     public static String humidity = "-9999";
