@@ -37,6 +37,9 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.common.api.Status;
 
+import net.sf.javaml.core.Dataset;
+import net.sf.javaml.core.DefaultDataset;
+
 public class MainActivity extends AppCompatActivity implements
         SensorEventListener, ResultCallback<Status>,
         GoogleApiClient.ConnectionCallbacks,
@@ -59,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements
     private static final String TAG = "MainActivity";
 
     private Compass compass;
+
+    public enum Turn {LEFT, RIGHT, U};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -377,7 +382,6 @@ public class MainActivity extends AppCompatActivity implements
             e.printStackTrace();
         }
     }
-
     // Start, Stop, Read
     public void onClick(View v) {
         switch(v.getId()) {
