@@ -39,6 +39,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.common.api.Status;
 
 import weka.core.pmml.Constant;
+import net.sf.javaml.core.Dataset;
+import net.sf.javaml.core.DefaultDataset;
+
 
 public class MainActivity extends AppCompatActivity implements
         SensorEventListener, ResultCallback<Status>,
@@ -65,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements
     private long leftVal = 0;
     private long rightVal = 0;
     private Compass compass;
+
+    public enum Turn {LEFT, RIGHT, U};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -427,7 +432,6 @@ public class MainActivity extends AppCompatActivity implements
             e.printStackTrace();
         }
     }
-
     // Start, Stop, Read
     public void onClick(View v) {
         switch(v.getId()) {
