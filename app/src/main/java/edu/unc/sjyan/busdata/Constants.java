@@ -8,7 +8,7 @@ public  class Constants {
     public static String header = "Time" + "," + "Temp" + "," + "Hum" + "," + "Baro" +
             "," + "Acc(x)" + "," + "Acc(y)" + "," + "Acc(z)" +
             "," + "LinAcc(x)" + "," + "LinAcc(y)" + "," + "LinAcc(z)" +
-            "," + "Mag(x)" + "," + "Mag(y)" + "," + "Mag(z)" +"," +  "Degrees" +
+            "," + "Mag(x)" + "," + "Mag(y)" + "," + "Mag(z)" + "," +  "Degrees" + "," + "Turn" +
             "," + "Gyro(x)" + "," + "Gyro(y)" + "," + "Gyro(z)" +
             "," + "Light" + "," + "Lat" + "," + "Long" + "," + "Stop";
     public static String acceloString = "-9999,-9999,-9999";
@@ -23,6 +23,14 @@ public  class Constants {
     public static String stopString = "-9999";
     public static String latString = "-9999";
     public static String longString = "-9999";
+    public static String turnString = "-9999";
     public static String ALL_SENSOR_STR = "-9999,-9999,-9999,-9999,-9999,-9999," +
-            "-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999";
+            "-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999";
+
+    //dc constants
+    public static int turnThreshold = 50;
+    public static int turnDegreeAmount = 40;
+    public static int zeroTo360DegreeAmount = 300;
+    public static String[] degreeArray = new String[turnThreshold];
+
 }

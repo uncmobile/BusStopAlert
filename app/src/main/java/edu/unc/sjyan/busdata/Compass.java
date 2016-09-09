@@ -46,7 +46,7 @@ public class Compass implements SensorEventListener {
 
     private void adjustArrow() {
         if (arrowView == null) {
-            Log.i(TAG, "arrow view is not set");
+            //Log.i(TAG, "arrow view is not set");
             return;
         }
 
@@ -107,7 +107,8 @@ public class Compass implements SensorEventListener {
                 //Log.d(TAG, "azimuth (rad): " + azimuth);
                 azimuth = (float) Math.toDegrees(orientation[0]); // orientation
                 azimuth = (azimuth + 360) % 360;
-                Log.d(TAG, "azimuth (deg): " + azimuth);
+                //azimuth = (azimuth + 360);
+                //Log.d(TAG, "azimuth (deg): " + azimuth);
                 Constants.degrees = ""+azimuth;
                 adjustArrow();
             }

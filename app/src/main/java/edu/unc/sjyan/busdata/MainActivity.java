@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +37,8 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.common.api.Status;
+
+import weka.core.pmml.Constant;
 
 public class MainActivity extends AppCompatActivity implements
         SensorEventListener, ResultCallback<Status>,
@@ -57,7 +60,10 @@ public class MainActivity extends AppCompatActivity implements
     TextView infoText;
     TextView currentBusStop;
     private static final String TAG = "MainActivity";
-
+    private int rowCount = 0;
+    //private int turnThreshold = 100;
+    private long leftVal = 0;
+    private long rightVal = 0;
     private Compass compass;
 
     @Override
@@ -191,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+
         try {
             busStop.setText("Bus stop: " + stopSlider.getProgress());
             busStop.invalidate();
@@ -226,8 +233,50 @@ public class MainActivity extends AppCompatActivity implements
                 Constants.lightString = "" + event.values[0];
             }
 
+
+
+
+
             /*We update the list of sensor values once every second*/
             if(System.currentTimeMillis() - lastUpdate >= 100) {
+
+
+                if(rowCount > Constants.turnThreshold - 1){
+                    //String temp = Constants.degreeArray[Constants.turnThreshold-1];
+                    //String temp2 = "";
+                    //Constants.degreeArray[Constants.turnThreshold-1] = Constants.degrees;
+                    //shifts array
+                    System.arraycopy(Constants.degreeArray, 1, Constants.degreeArray, 0, Constants.degreeArray.length - 1);
+
+                    Constants.degreeArray[Constants.turnThreshold-1] = Constants.degrees;
+                    Log.v("ARRAY SHIFTED", ""+Arrays.toString(Constants.degreeArray));
+                    double left = Double.parseDouble(Constants.degreeArray[0]);
+                    double right = Double.parseDouble(Constants.degreeArray[Constants.turnThreshold - 1]);
+                    if(Math.abs(left-right) > Constants.turnDegreeAmount){
+                        if(left-right < 0){
+                            if(Math.abs(left-right) > Constants.zeroTo360DegreeAmount){
+                                Arrays.fill(Constants.degreeArray, Constants.degrees);
+                                //Constants.turnString = "LEFT";
+                            }else {
+                                Constants.turnString = "RIGHT";
+                            }
+                        }
+                        else{
+                            if(Math.abs(left-right) > Constants.zeroTo360DegreeAmount){
+                                //Constants.turnString = "RIGHT";
+                                Arrays.fill(Constants.degreeArray, Constants.degrees);
+                            }else {
+                                Constants.turnString = "LEFT";
+                            }
+                        }
+                    }else{
+                        Constants.turnString = "-9999";
+                    }
+                }else{
+                    Constants.degreeArray[rowCount] = Constants.degrees;
+                    Log.v("ARRAY", ""+ Arrays.toString(Constants.degreeArray));
+                }
+                rowCount++;
 
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
                 String currentDateandTime = sdf.format(new Date());
@@ -235,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements
                 String str = /*currentDateandTime*/milliseconds + "," + Constants.temperature + "," +
                         Constants.humidity + "," + Constants.baroString + "," +
                         Constants.acceloString + "," + Constants.linAcceloString + "," +  Constants.magnet + "," +
-                        Constants.degrees + "," + Constants.gyroString + "," + Constants.lightString + "," +
+                        Constants.degrees + "," + Constants.turnString + "," + Constants.gyroString + "," + Constants.lightString + "," +
                         Constants.latString + "," + Constants.longString + "," +
                         Constants.stopString;
 
@@ -308,7 +357,8 @@ public class MainActivity extends AppCompatActivity implements
         if(magnetSensor != null) {
             sensorManager.registerListener(this, magnetSensor, 900);
             senlist += " MAG ";
-            senlist += "DEGREES";
+            senlist += " DEGREES ";
+            senlist += " TURN ";
         }
 
         if(gyroscopeSensor != null) {
