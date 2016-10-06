@@ -3,6 +3,7 @@ package edu.unc.sjyan.busdata;
 // Android Packages
 import android.app.Dialog;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -11,8 +12,10 @@ import android.location.Location;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
@@ -41,6 +44,7 @@ import com.google.android.gms.common.api.Status;
 import weka.core.pmml.Constant;
 import net.sf.javaml.core.Dataset;
 import net.sf.javaml.core.DefaultDataset;
+import net.sf.javaml.core.Instance;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -55,10 +59,11 @@ public class MainActivity extends AppCompatActivity implements
     TextView busStop;
     SeekBar stopSlider;
     Switch gpsSwitch;
+    Button logLeft, logRight;
     private long lastUpdate = 0;
     SensorManager sensorManager;
     Sensor tempSensor, humidSensor, acceleroSensor,linAcceleroSensor, magnetSensor, gyroscopeSensor,
-            barometerSensor, lightSensor;
+            barometerSensor, lightSensor, orientSensor;
     private GoogleApiClient c = null;
     TextView infoText;
     TextView currentBusStop;
@@ -68,8 +73,7 @@ public class MainActivity extends AppCompatActivity implements
     private long leftVal = 0;
     private long rightVal = 0;
     private Compass compass;
-
-    public enum Turn {LEFT, RIGHT, U};
+    float currentAzimuth = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,46 @@ public class MainActivity extends AppCompatActivity implements
         busStop = (TextView) findViewById(R.id.busStopText);
         stopSlider = (SeekBar) findViewById(R.id.busStopSlider);
         gpsSwitch = (Switch) findViewById(R.id.switch1);
+        logLeft = (Button) findViewById(R.id.left);
+        logRight = (Button) findViewById(R.id.right);
+        logLeft.setVisibility(View.INVISIBLE);
+        logRight.setVisibility(View.INVISIBLE);
+
+        logLeft.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    v.getBackground().setColorFilter(0xe0f47521, PorterDuff.Mode.SRC_ATOP);
+                    v.invalidate();
+                    Constants.realTurnString = "LEFT";
+                }
+
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    v.getBackground().clearColorFilter();
+                    v.invalidate();
+                    Constants.realTurnString = "IDLE";
+                }
+                return true;
+            }
+        });
+
+        logRight.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    v.getBackground().setColorFilter(0xe0f47521, PorterDuff.Mode.SRC_ATOP);
+                    v.invalidate();
+                    Constants.realTurnString = "RIGHT";
+                }
+
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    v.getBackground().clearColorFilter();
+                    v.invalidate();
+                    Constants.realTurnString = "IDLE";
+                }
+                return true;
+            }
+        });
 
         stopSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -236,6 +280,21 @@ public class MainActivity extends AppCompatActivity implements
             }
             else if(currType == Sensor.TYPE_LIGHT) {
                 Constants.lightString = "" + event.values[0];
+            } else if(currType == Sensor.TYPE_ORIENTATION) {
+                float azimuthAngle = event.values[0];
+                int precision = 20; // adjust this value or learn this value
+
+                if(currentAzimuth - azimuthAngle < precision * -1) { // right threshold
+                    Constants.turnAzimuthString = "RIGHT";
+                    Toast.makeText(getBaseContext(), "Detected Right",
+                            Toast.LENGTH_SHORT).show();
+                } else if(currentAzimuth - azimuthAngle > precision) { // left threshold
+                    Constants.turnAzimuthString = "LEFT";
+                    Toast.makeText(getBaseContext(), "Detected Left",
+                            Toast.LENGTH_SHORT).show();
+                }
+
+                currentAzimuth = azimuthAngle;
             }
 
 
@@ -291,10 +350,12 @@ public class MainActivity extends AppCompatActivity implements
                         Constants.acceloString + "," + Constants.linAcceloString + "," +  Constants.magnet + "," +
                         Constants.degrees + "," + Constants.turnString + "," + Constants.gyroString + "," + Constants.lightString + "," +
                         Constants.latString + "," + Constants.longString + "," +
-                        Constants.stopString;
+                        Constants.stopString + "," + Constants.turnAzimuthString + "," + Constants.realTurnString;
 
                 Constants.ALL_SENSOR_STR = str;
                 appendContent(Constants.ALL_SENSOR_STR + "\n");
+                Constants.turnAzimuthString = "-9999"; // reset turn string
+                // Constants.realTurnString = "IDLE";
                 //Constants.stopString = "-9999"; // reset bus stop
                 //Constants.list.add(str);
                 lastUpdate = System.currentTimeMillis();
@@ -328,6 +389,7 @@ public class MainActivity extends AppCompatActivity implements
         humidSensor = sensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY);
         barometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        orientSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION); // deprecated but testing
 
         List<Sensor> sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL);
         for(int i = 0 ; i < sensorList.size(); i++){
@@ -442,6 +504,8 @@ public class MainActivity extends AppCompatActivity implements
                     infoText.setTextColor(Color.parseColor("#45ef6d"));
                     Toast.makeText(getBaseContext(), "Started reading environment",
                             Toast.LENGTH_SHORT).show();
+                    logLeft.setVisibility(View.VISIBLE);
+                    logRight.setVisibility(View.VISIBLE);
                 } else {
                     Toast.makeText(getBaseContext(), "You need to stop collecting data first",
                             Toast.LENGTH_SHORT).show();
@@ -456,6 +520,8 @@ public class MainActivity extends AppCompatActivity implements
                     sensortxt.setText("Sensors:");
                     Toast.makeText(getBaseContext(), "Stopped reading environment",
                             Toast.LENGTH_SHORT).show();
+                    logLeft.setVisibility(View.INVISIBLE);
+                    logRight.setVisibility(View.INVISIBLE);
                 } else {
                     Toast.makeText(getBaseContext(), "You aren't collecting any data yet",
                             Toast.LENGTH_SHORT).show();

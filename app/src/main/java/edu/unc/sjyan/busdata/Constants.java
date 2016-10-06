@@ -25,7 +25,10 @@ public  class Constants {
     public static String longString = "-9999";
     public static String turnString = "-9999";
     public static String ALL_SENSOR_STR = "-9999,-9999,-9999,-9999,-9999,-9999," +
-            "-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999";
+            "-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999"
+            + "-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999";
+    public static String turnAzimuthString = "-9999";
+    public static String realTurnString = "IDLE";
 
     //dc constants
     public static int turnThreshold = 50;
