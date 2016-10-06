@@ -4,13 +4,13 @@ package edu.unc.sjyan.busdata;
  * Created by Tamzeed on 3/28/16.
  */
 public  class Constants {
-    public static final String USER = "chenchik";
+    public static final String USER = "sjyan";
     public static String header = "Time" + "," + "Temp" + "," + "Hum" + "," + "Baro" +
             "," + "Acc(x)" + "," + "Acc(y)" + "," + "Acc(z)" +
             "," + "LinAcc(x)" + "," + "LinAcc(y)" + "," + "LinAcc(z)" +
             "," + "Mag(x)" + "," + "Mag(y)" + "," + "Mag(z)" + "," +  "Degrees" + "," + "Turn" +
             "," + "Gyro(x)" + "," + "Gyro(y)" + "," + "Gyro(z)" +
-            "," + "Light" + "," + "Lat" + "," + "Long" + "," + "Stop";
+            "," + "Light" + "," + "Lat" + "," + "Long" + "," + "Stop" + "," + "TurnAzimuth" + "," + "TurnReal";
     public static String acceloString = "-9999,-9999,-9999";
     public static String linAcceloString = "-9999,-9999,-9999";
     public static String magnet = "-9999,-9999,-9999";
@@ -25,7 +25,9 @@ public  class Constants {
     public static String longString = "-9999";
     public static String turnString = "-9999";
     public static String ALL_SENSOR_STR = "-9999,-9999,-9999,-9999,-9999,-9999," +
-            "-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999";
+            "-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999,-9999";
+    public static String turnAzimuthString = "-9999";
+    public static String realTurnString = "IDLE";
 
     //dc constants
     public static int turnThreshold = 50;
