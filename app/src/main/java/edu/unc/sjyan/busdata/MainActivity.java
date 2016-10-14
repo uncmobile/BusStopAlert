@@ -23,13 +23,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 // Std Java Lib
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 // Google play services
 import com.google.android.gms.common.ConnectionResult;
@@ -42,9 +48,13 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.common.api.Status;
 
 import weka.core.pmml.Constant;
+
+import net.sf.javaml.classification.Classifier;
+import net.sf.javaml.classification.KNearestNeighbors;
 import net.sf.javaml.core.Dataset;
 import net.sf.javaml.core.DefaultDataset;
 import net.sf.javaml.core.Instance;
+import net.sf.javaml.tools.data.FileHandler;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -282,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements
                 Constants.lightString = "" + event.values[0];
             } else if(currType == Sensor.TYPE_ORIENTATION) {
                 float azimuthAngle = event.values[0];
-                int precision = 20; // adjust this value or learn this value
+                int precision = 10; // adjust this value or learn this value
 
                 if(currentAzimuth - azimuthAngle < precision * -1) { // right threshold
                     Constants.turnAzimuthString = "RIGHT";
@@ -569,4 +579,63 @@ public class MainActivity extends AppCompatActivity implements
         }
 
     }
+
+    public void trainModel(String path) {
+        File file = new File(Environment.getExternalStorageDirectory() +
+                "/bean_data_sjyan/" + path);
+        Dataset training = null;
+
+
+        try {
+            training = FileHandler.loadDataset(file, 24, ",");
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        Classifier knn = new KNearestNeighbors(5);
+        knn.buildClassifier(training);
+    }
+
+    public void parseTurnThresholds(String path) {
+        File file = new File(Environment.getExternalStorageDirectory() +
+                "/bean_data_sjyan/" + path); // find correct path
+        BufferedReader reader = null;
+        ArrayList<Double> rightDegrees = new ArrayList<Double>();
+        ArrayList<Double> leftDegrees = new ArrayList<Double>();
+
+        try {
+            reader = new BufferedReader(new FileReader(file));
+        } catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] RowData = line.split(",");
+                double degrees = Double.parseDouble(RowData[13]);
+                String maneuver = RowData[23];
+
+                if(maneuver.equals("LEFT")) {
+                    leftDegrees.add(degrees);
+                } else if(maneuver.equals("RIGHT")) {
+                    rightDegrees.add(degrees);
+                }
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        finally {
+            try {
+                reader.close();
+            }
+            catch (IOException e) {
+                // handle exception
+            }
+        }
+
+
+    }
+
 }
