@@ -598,7 +598,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public void parseTurnThresholds(String path) {
         File file = new File(Environment.getExternalStorageDirectory() +
-                "/bean_data_sjyan/" + path); // find correct path
+                "/bean_data_sjyan/" + path); // hard coded for now, will adapt later
         BufferedReader reader = null;
         ArrayList<Double> rightDegrees = new ArrayList<Double>();
         ArrayList<Double> leftDegrees = new ArrayList<Double>();
